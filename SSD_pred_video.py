@@ -15,7 +15,7 @@ from progressbar import ProgressBar
 import datetime
 
 # 書き出し設定
-voc_classes = ['face'] #ラベル一覧
+voc_classes = ['vagina', 'pennis'] #ラベル一覧
 weight_file_name = "./checkpoints/weights.19-0.87.hdf5"
 video_file_name = './free_data/lonestartx_free.mp4'
 # -----------------------

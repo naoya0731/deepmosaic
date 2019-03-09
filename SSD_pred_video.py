@@ -27,16 +27,16 @@ config.gpu_options.per_process_gpu_memory_fraction = 0.45
 set_session(tf.Session(config=config))
 
 
-voc_classes = ['face', 'hand']
+voc_classes = ['vagina', 'pennis']
 NUM_CLASSES = len(voc_classes) + 1
 
 input_shape=(300, 300, 3)
 model = SSD300(input_shape, num_classes=NUM_CLASSES)
 # model.load_weights('weights_SSD300.hdf5', by_name=True)
-model.load_weights('./checkpoints/weights.99-2.78.hdf5', by_name=True)
+model.load_weights('./checkpoints/weights.19-1.17.hdf5', by_name=True)
 bbox_util = BBoxUtility(NUM_CLASSES)
 
-vid = cv2.VideoCapture('./free_data/lonestartx_free.mp4')
+vid = cv2.VideoCapture('./free_data/erodouga_20sec.mp4')
 if not vid.isOpened():
     raise IOError(("Couldn't open video file or webcam. If you're "
     "trying to open a webcam, make sure you video_path is an integer!"))

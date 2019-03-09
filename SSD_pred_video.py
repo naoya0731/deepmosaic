@@ -36,7 +36,7 @@ model = SSD300(input_shape, num_classes=NUM_CLASSES)
 model.load_weights('./checkpoints/weights.19-1.17.hdf5', by_name=True)
 bbox_util = BBoxUtility(NUM_CLASSES)
 
-vid = cv2.VideoCapture('./free_data/erodouga_20sec.mp4')
+vid = cv2.VideoCapture('./free_data/erodouga_20sec_onishi.mp4')
 if not vid.isOpened():
     raise IOError(("Couldn't open video file or webcam. If you're "
     "trying to open a webcam, make sure you video_path is an integer!"))

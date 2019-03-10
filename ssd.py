@@ -5,6 +5,7 @@ from keras.layers import Activation
 from keras.layers import AtrousConvolution2D
 from keras.layers import Conv2D
 from keras.layers import Dense
+from keras.layers import Dropout
 from keras.layers import Flatten
 from keras.layers import GlobalAveragePooling2D
 from keras.layers import Input
@@ -104,15 +105,17 @@ def SSD300(input_shape, num_classes=21):
     net['fc6'] = AtrousConvolution2D(1024, (3, 3), atrous_rate=(6, 6),
                                      activation='relu', padding='same',
                                      name='fc6')(net['pool5'])
-    # x = Dropout(0.5, name='drop6')(x)
+    x = Dropout(0.5, name='drop6')(net['fc6'])
+    net['drop6'] = x
     # FC7
     net['fc7'] = Conv2D(1024, (1, 1), activation='relu',
-                               name='fc7', padding='same')(net['fc6'])
-    # x = Dropout(0.5, name='drop7')(x)
+                               name='fc7', padding='same')(net['drop6'])
+    x = Dropout(0.5, name='drop7')(net['fc7'])
+    net['drop7'] = x
     # Block 6
     net['conv6_1'] = Conv2D(256, (1, 1), activation='relu',
                                    name='conv6_1', 
-                                   padding='same')(net['fc7'])
+                                   padding='same')(net['drop7'])
     net['conv6_2'] = Conv2D(512, (3, 3), subsample=(2, 2),
                                    activation='relu', name='conv6_2',
                                    padding='same')(net['conv6_1'])

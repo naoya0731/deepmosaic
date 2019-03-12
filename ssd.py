@@ -1,6 +1,7 @@
 """Keras implementation of SSD."""
 
 import keras.backend as K
+from keras import regularizers
 from keras.layers import Activation
 from keras.layers import AtrousConvolution2D
 from keras.layers import Conv2D
@@ -38,109 +39,109 @@ def SSD300(input_shape, num_classes=21):
     net['conv1_1'] = Conv2D(64, (3, 3),
                                    activation='relu',
                                    name='conv1_1',
-                                   padding='same')(net['input'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['input'])
     net['conv1_2'] = Conv2D(64, (3, 3),
                                    activation='relu',
                                    name='conv1_2',
-                                   padding='same')(net['conv1_1'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv1_1'])
     net['pool1'] = MaxPooling2D((2, 2), strides=(2, 2), padding='same',
                                 name='pool1')(net['conv1_2'])
     # Block 2
     net['conv2_1'] = Conv2D(128, (3, 3),
                                    activation='relu',
                                    padding='same',
-                                   name='conv2_1')(net['pool1'])
+                                   name='conv2_1', kernel_regularizer=regularizers.l2(0.01))(net['pool1'])
     net['conv2_2'] = Conv2D(128, (3, 3),
                                    activation='relu',
                                    name='conv2_2', 
-                                   padding='same')(net['conv2_1'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv2_1'])
     net['pool2'] = MaxPooling2D((2, 2), strides=(2, 2), padding='same',
                                 name='pool2')(net['conv2_2'])
     # Block 3
     net['conv3_1'] = Conv2D(256, (3, 3),
                                    activation='relu',
                                    name='conv3_1',
-                                   padding='same')(net['pool2'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['pool2'])
     net['conv3_2'] = Conv2D(256, (3, 3),
                                    activation='relu',
                                    name='conv3_2',
-                                   padding='same')(net['conv3_1'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv3_1'])
     net['conv3_3'] = Conv2D(256, (3, 3),
                                    activation='relu',
                                    name='conv3_3',
-                                   padding='same')(net['conv3_2'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv3_2'])
     net['pool3'] = MaxPooling2D((2, 2), strides=(2, 2), padding='same',
                                 name='pool3')(net['conv3_3'])
     # Block 4
     net['conv4_1'] = Conv2D(512, (3, 3),
                                    activation='relu',
                                    name='conv4_1',
-                                   padding='same')(net['pool3'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['pool3'])
     net['conv4_2'] = Conv2D(512, (3, 3),
                                    activation='relu',
                                    name='conv4_2',
-                                   padding='same')(net['conv4_1'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv4_1'])
     net['conv4_3'] = Conv2D(512, (3, 3),
                                    activation='relu',
                                    name='conv4_3',
-                                   padding='same')(net['conv4_2'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv4_2'])
     net['pool4'] = MaxPooling2D((2, 2), strides=(2, 2), padding='same',
                                 name='pool4')(net['conv4_3'])
     # Block 5
     net['conv5_1'] = Conv2D(512, (3, 3),
                                    activation='relu',
                                    name='conv5_1',
-                                   padding='same')(net['pool4'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['pool4'])
     net['conv5_2'] = Conv2D(512, (3, 3),
                                    activation='relu',
                                    name='conv5_2',
-                                   padding='same')(net['conv5_1'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv5_1'])
     net['conv5_3'] = Conv2D(512, (3, 3),
                                    activation='relu',
                                    name='conv5_3',
-                                   padding='same')(net['conv5_2'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv5_2'])
     net['pool5'] = MaxPooling2D((3, 3), strides=(1, 1), padding='same',
                                 name='pool5')(net['conv5_3'])
     # FC6
     net['fc6'] = AtrousConvolution2D(1024, (3, 3), atrous_rate=(6, 6),
                                      activation='relu', padding='same',
-                                     name='fc6')(net['pool5'])
+                                     name='fc6', kernel_regularizer=regularizers.l2(0.01))(net['pool5'])
     x = Dropout(0.5, name='drop6')(net['fc6'])
     net['drop6'] = x
     # FC7
     net['fc7'] = Conv2D(1024, (1, 1), activation='relu',
-                               name='fc7', padding='same')(net['drop6'])
+                               name='fc7', padding='same', kernel_regularizer=regularizers.l2(0.01))(net['drop6'])
     x = Dropout(0.5, name='drop7')(net['fc7'])
     net['drop7'] = x
     # Block 6
     net['conv6_1'] = Conv2D(256, (1, 1), activation='relu',
                                    name='conv6_1', 
-                                   padding='same')(net['drop7'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['drop7'])
     net['conv6_2'] = Conv2D(512, (3, 3), subsample=(2, 2),
                                    activation='relu', name='conv6_2',
-                                   padding='same')(net['conv6_1'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv6_1'])
     # Block 7
     net['conv7_1'] = Conv2D(128, (1, 1), activation='relu',
                                    name='conv7_1', 
-                                   padding='same')(net['conv6_2'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv6_2'])
     net['conv7_2'] = ZeroPadding2D()(net['conv7_1'])
     net['conv7_2'] = Conv2D(256, (3, 3), subsample=(2, 2),
                                    activation='relu', name='conv7_2',
-                                   padding='valid')(net['conv7_2'])
+                                   padding='valid', kernel_regularizer=regularizers.l2(0.01))(net['conv7_2'])
     # Block 8
     net['conv8_1'] = Conv2D(128, (1, 1), activation='relu',
                                    name='conv8_1',
-                                   padding='same')(net['conv7_2'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv7_2'])
     net['conv8_2'] = Conv2D(256, (3, 3), subsample=(2, 2),
                                    activation='relu', name='conv8_2',
-                                   padding='same')(net['conv8_1'])
+                                   padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv8_1'])
     # Last Pool
     net['pool6'] = GlobalAveragePooling2D(name='pool6')(net['conv8_2'])
     # Prediction from conv4_3
     net['conv4_3_norm'] = Normalize(20, name='conv4_3_norm')(net['conv4_3'])
     num_priors = 3
     x = Conv2D(num_priors * 4, (3, 3), name='conv4_3_norm_mbox_loc',
-                        padding='same')(net['conv4_3_norm'])
+                        padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv4_3_norm'])
     net['conv4_3_norm_mbox_loc'] = x
     flatten = Flatten(name='conv4_3_norm_mbox_loc_flat')
     net['conv4_3_norm_mbox_loc_flat'] = flatten(net['conv4_3_norm_mbox_loc'])
@@ -148,7 +149,7 @@ def SSD300(input_shape, num_classes=21):
     if num_classes != 21:
         name += '_{}'.format(num_classes)
     x = Conv2D(num_priors * num_classes, (3, 3), name=name, 
-                        padding='same')(net['conv4_3_norm'])
+                        padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv4_3_norm'])
     net['conv4_3_norm_mbox_conf'] = x
     flatten = Flatten(name='conv4_3_norm_mbox_conf_flat')
     net['conv4_3_norm_mbox_conf_flat'] = flatten(net['conv4_3_norm_mbox_conf'])
@@ -160,7 +161,7 @@ def SSD300(input_shape, num_classes=21):
     num_priors = 6
     net['fc7_mbox_loc'] = Conv2D(num_priors * 4, (3, 3),
                                         name='fc7_mbox_loc', 
-                                        padding='same')(net['fc7'])
+                                        padding='same', kernel_regularizer=regularizers.l2(0.01))(net['fc7'])
     flatten = Flatten(name='fc7_mbox_loc_flat')
     net['fc7_mbox_loc_flat'] = flatten(net['fc7_mbox_loc'])
     name = 'fc7_mbox_conf'
@@ -168,7 +169,7 @@ def SSD300(input_shape, num_classes=21):
         name += '_{}'.format(num_classes)
     net['fc7_mbox_conf'] = Conv2D(num_priors * num_classes, (3, 3),
                                          name=name, 
-                                         padding='same')(net['fc7'])
+                                         padding='same', kernel_regularizer=regularizers.l2(0.01))(net['fc7'])
     flatten = Flatten(name='fc7_mbox_conf_flat')
     net['fc7_mbox_conf_flat'] = flatten(net['fc7_mbox_conf'])
     priorbox = PriorBox(img_size, 60.0, max_size=114.0, aspect_ratios=[2, 3],
@@ -178,7 +179,7 @@ def SSD300(input_shape, num_classes=21):
     # Prediction from conv6_2
     num_priors = 6
     x = Conv2D(num_priors * 4, (3, 3), name='conv6_2_mbox_loc', 
-                                        padding='same')(net['conv6_2'])
+                                        padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv6_2'])
     net['conv6_2_mbox_loc'] = x
     flatten = Flatten(name='conv6_2_mbox_loc_flat')
     net['conv6_2_mbox_loc_flat'] = flatten(net['conv6_2_mbox_loc'])
@@ -197,7 +198,7 @@ def SSD300(input_shape, num_classes=21):
     # Prediction from conv7_2
     num_priors = 6
     x = Conv2D(num_priors * 4, (3, 3), name='conv7_2_mbox_loc', 
-                        padding='same')(net['conv7_2'])
+                        padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv7_2'])
     net['conv7_2_mbox_loc'] = x
     flatten = Flatten(name='conv7_2_mbox_loc_flat')
     net['conv7_2_mbox_loc_flat'] = flatten(net['conv7_2_mbox_loc'])
@@ -205,7 +206,7 @@ def SSD300(input_shape, num_classes=21):
     if num_classes != 21:
         name += '_{}'.format(num_classes)
     x = Conv2D(num_priors * num_classes, (3, 3), name=name, 
-                        padding='same')(net['conv7_2'])
+                        padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv7_2'])
     net['conv7_2_mbox_conf'] = x
     flatten = Flatten(name='conv7_2_mbox_conf_flat')
     net['conv7_2_mbox_conf_flat'] = flatten(net['conv7_2_mbox_conf'])
@@ -216,7 +217,7 @@ def SSD300(input_shape, num_classes=21):
     # Prediction from conv8_2
     num_priors = 6
     x = Conv2D(num_priors * 4, (3, 3), name='conv8_2_mbox_loc',
-                      padding='same')(net['conv8_2'])
+                      padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv8_2'])
     net['conv8_2_mbox_loc'] = x
     flatten = Flatten(name='conv8_2_mbox_loc_flat')
     net['conv8_2_mbox_loc_flat'] = flatten(net['conv8_2_mbox_loc'])
@@ -224,7 +225,7 @@ def SSD300(input_shape, num_classes=21):
     if num_classes != 21:
         name += '_{}'.format(num_classes)
     x = Conv2D(num_priors * num_classes, (3, 3), name=name, 
-                        padding='same')(net['conv8_2'])
+                        padding='same', kernel_regularizer=regularizers.l2(0.01))(net['conv8_2'])
     net['conv8_2_mbox_conf'] = x
     flatten = Flatten(name='conv8_2_mbox_conf_flat')
     net['conv8_2_mbox_conf_flat'] = flatten(net['conv8_2_mbox_conf'])

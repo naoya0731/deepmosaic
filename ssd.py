@@ -20,6 +20,11 @@ from ssd_layers import Normalize
 from ssd_layers import PriorBox
 
 
+# https://qiita.com/de0ta/items/1ae60878c0e177fc7a3a
+# SSD300の300は入力サイズによるもの。
+# SSD512も存在する。
+# Referencesに記載されている論文のfig2とはズレているところがあるが、
+# 構成は同じとなっている。
 def SSD300(input_shape, num_classes=21):
     """SSD300 architecture.
 
@@ -32,6 +37,7 @@ def SSD300(input_shape, num_classes=21):
         https://arxiv.org/abs/1512.02325
     """
     net = {}
+    ### Layer Start ###
     # Block 1
     input_tensor = input_tensor = Input(shape=input_shape)
     img_size = (input_shape[1], input_shape[0])
@@ -137,6 +143,8 @@ def SSD300(input_shape, num_classes=21):
                                    padding='same', kernel_regularizer=regularizers.l1(0.01))(net['conv8_1'])
     # Last Pool
     net['pool6'] = GlobalAveragePooling2D(name='pool6')(net['conv8_2'])
+    ### Layer Start ###
+    
     # Prediction from conv4_3
     net['conv4_3_norm'] = Normalize(20, name='conv4_3_norm')(net['conv4_3'])
     num_priors = 3
